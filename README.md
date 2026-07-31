@@ -21,3 +21,12 @@ require('sex').setup(
     90, -- width of the sex window
     30 -- height of the sex window
 )
+
+# To Do
+
+- Randomizer
+- :SexClose
+- Nicer looking floating window
+- Better configuration
+- Better README
+- Support for kitty image protocol and other terminal image protocols
