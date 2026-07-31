@@ -30,3 +30,4 @@ require('sex').setup(
 - Better configuration
 - Better README
 - Support for kitty image protocol and other terminal image protocols
+- Animation
