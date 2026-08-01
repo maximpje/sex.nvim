@@ -1,6 +1,6 @@
 local M = {}
 
-function girl(goon_dir)
+function Foid(goon_dir)
     local goonfile = goon_dir .. '1.txt'
     local i = 0
     local lua_goon_table = {}
@@ -18,7 +18,7 @@ function M.setup(goon_dir, width, height)
     vim.api.nvim_create_user_command('SexOpen', function()
         local buf = vim.api.nvim_create_buf(false, true)
 
-        vim.api.nvim_buf_set_lines(buf, 0, -1, true, girl(goon_dir))
+        vim.api.nvim_buf_set_lines(buf, 0, -1, true, Foid(goon_dir))
 
         local sexwindow = vim.api.nvim_open_win(buf, false, {
             relative='win',
