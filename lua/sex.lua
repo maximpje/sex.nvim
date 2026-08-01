@@ -50,6 +50,19 @@ function M.setup(goon_dir, goon_amount)
             sexwindow = nil
         end
     end, {})
+
+    vim.api.nvim_create_user_command('SexReload', function ()
+        vim.api.nvim_cmd({cmd = 'SexClose'}, {})
+        vim.api.nvim_cmd({cmd = 'SexOpen'}, {})
+    end, {})
+
+    vim.api.nvim_create_user_command('SexVersion', function ()
+        print('sex.nvim   version: 0.0')
+    end, {})
+
+    vim.api.nvim_create_user_command('SexUpdate', function ()
+        vim.pack.update({ 'sex.nvim'}, { force=true })
+    end, {})
 end
 
 return M
