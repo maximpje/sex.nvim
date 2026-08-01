@@ -21,16 +21,22 @@ vim.pack.add({
 ```lua
 require('sex').setup(
     '/PATH/TO/YOUR/GOON/MATERIAL', -- has to be an absolute path
-    90, -- width of the sex window
-    30 -- height of the sex window
+    5 -- the amount of goon pics in the goon material folder
 )
 ```
 
+Your goon material folder should have at least one ascii art, it should be named '1.txt', with the second one being called '2.txt' etc.
+
+```
+goon_material
+├── 1.txt
+└── 2.txt
+```
+
+You can add as many as you want.
+
 # To Do
 
-- Randomizer
-- Nicer looking floating window
 - Better configuration
-- Better README
 - Support for kitty image protocol and other terminal image protocols
 - Animation
