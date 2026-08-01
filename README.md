@@ -6,7 +6,9 @@ This repository does NOT contain any gooning material, it does NOT have any expl
 
 # usage
 
-With sex.vim you can open a floating gooner window with :SexOpen, this will open a random piece of ascii art from a specified folder.
+With sex.vim you can open a floating gooner window with :SexOpen, this will open a random piece of ascii art from a specified folder. Close the window with :SexClose.
+
+To not have to constantly run close and open run :SexReload, to get a statistically probably chance of seeing a different image.
 
 # installation
 
