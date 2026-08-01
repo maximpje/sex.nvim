@@ -29,7 +29,6 @@ require('sex').setup(
 # To Do
 
 - Randomizer
-- :SexClose
 - Nicer looking floating window
 - Better configuration
 - Better README

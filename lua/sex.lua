@@ -24,9 +24,10 @@ local function create_window(goon_dir, width, height)
         height=height,
         col=vim.api.nvim_win_get_width(0),
         row=0,
-        border={"╔", "═" ,"╗", "║", "╝", "═", "╚", "║"},
+        border={"╭", "─" ,"╮", "│", "╯", "─", "╰", "│"},
         anchor='NE',
         style='minimal',
+        title=' SEX ',
     })
 
     return sexwindow
