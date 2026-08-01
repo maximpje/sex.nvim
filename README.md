@@ -12,12 +12,26 @@ With sex.vim you can open a floating gooner window with :SexOpen, this will open
 
 with vim.pack
 
+```lua
 vim.pack.add({
     "https://github.com/maximpje/sex.nvim",
 )}
+```
 
+```lua
 require('sex').setup(
     '/PATH/TO/YOUR/GOON/MATERIAL', -- has to be an absolute path
     90, -- width of the sex window
     30 -- height of the sex window
 )
+```
+
+# To Do
+
+- Randomizer
+- :SexClose
+- Nicer looking floating window
+- Better configuration
+- Better README
+- Support for kitty image protocol and other terminal image protocols
+- Animation
