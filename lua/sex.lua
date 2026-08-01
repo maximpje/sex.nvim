@@ -10,10 +10,14 @@ local function foid(goon_dir, goon_amount)
     return lua_goon_table
 end
 
-local function create_window(goon_dir, goon_amount, width, height)
+local function create_window(goon_dir, goon_amount)
     local buf = vim.api.nvim_create_buf(false, true)
+    local lua_goon_table = foid(goon_dir, goon_amount)
 
-    vim.api.nvim_buf_set_lines(buf, 0, -1, true, foid(goon_dir, goon_amount))
+    local height = #lua_goon_table
+    local width = string.len(lua_goon_table[1])/3
+
+    vim.api.nvim_buf_set_lines(buf, 0, -1, true, lua_goon_table)
 
     local sexwindow = vim.api.nvim_open_win(buf, false, {
         relative='win',
@@ -30,13 +34,13 @@ local function create_window(goon_dir, goon_amount, width, height)
     return sexwindow
 end
 
-function M.setup(goon_dir, goon_amount, width, height)
+function M.setup(goon_dir, goon_amount)
 
     local sexwindow = nil
 
     vim.api.nvim_create_user_command('SexOpen', function ()
         if sexwindow == nil then
-            sexwindow = create_window(goon_dir, goon_amount, width, height)
+            sexwindow = create_window(goon_dir, goon_amount)
         end
     end, {})
 
