@@ -10,7 +10,7 @@ function M.setup(args)
     goon.setup(goon_dir, goon_amount)
 
     vim.api.nvim_create_user_command('SexVersion', function ()
-        print('sex.nvim   version: 0.0')
+        print('sex.nvim   version: 0.0    commit: animation testing 1')
     end, {})
 
     vim.api.nvim_create_user_command('SexUpdate', function ()
