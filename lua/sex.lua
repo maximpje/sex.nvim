@@ -1,9 +1,23 @@
 local M = {}
 
+local prev = 0
+
+local function gen_random(goon_amount)
+    local ran = math.random(1, goon_amount)
+
+    if prev ~= ran then
+        prev = ran
+    else
+        ran = gen_random(goon_amount)
+    end
+
+    return ran
+end
+
 local function foid(goon_dir, goon_amount)
     local lua_goon_table = {}
 
-    for line in io.lines(goon_dir .. math.random(1, goon_amount) .. '.txt') do
+    for line in io.lines(goon_dir .. gen_random(goon_amount) .. '.txt') do
         table.insert(lua_goon_table, line)
     end
 
