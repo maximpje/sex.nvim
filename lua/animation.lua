@@ -68,11 +68,15 @@ local symbols = {
 }
 
 local function condition(x, y)
-    return x > y
+    -- print(x .. " " .. y)
+    return math.abs(x - y) < 1
 end
 
 local function get_char(x, y)
     local char
+
+    x = x*2
+    y = y*3
 
     local d1 = 0
     local d2 = 0
@@ -81,26 +85,28 @@ local function get_char(x, y)
     local d5 = 0
     local d6 = 0
 
-    if condition(x*2, y*3) then
+    if condition(x, y+2) then
         d6 = 1
     end
-    if condition((x*2)+1, y*3) then
+    if condition(x+1, y+2) then
         d5 = 1
     end
-    if condition(x*2, (y*3)+1) then
+    if condition(x, y+1) then
         d4 = 1
     end
-    if condition((x*2)+1, (y*3)+1) then
+    if condition(x+1, y+1) then
         d3 = 1
     end
-    if condition(x*2, (y*3)+2) then
+    if condition(x, y) then
         d2 = 1
     end
-    if condition((x*2)+1, (y*3)+2) then
+    if condition(x+1, y) then
         d1 = 1
     end
 
     char = symbols['b' .. d1 .. d2 .. d3 .. d4 .. d5 .. d6]
+
+    -- print('b' .. d1 .. d2 .. d3 .. d4 .. d5 .. d6)
 
     return char
 end
@@ -108,23 +114,21 @@ end
 local function create_frame(width, height)
     local frame = {}
 
-    local x = 0
     local y = 0
 
-    while y <= width do
+    while y < height do
+        local x = 0
         local str = ''
 
-        while x <= height do
-            str = str .. get_char(x, y)
+        while x < width do
+            str = str .. get_char(x-(width/2), -y+(height/2))
             x = x+1
         end
 
         table.insert(frame, str)
 
-        y = y + 1
+        y = y+1
     end
-
-    print(frame)
 
     return frame
 end
