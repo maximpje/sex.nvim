@@ -21,10 +21,10 @@ vim.pack.add({
 ```
 
 ```lua
-require('sex').setup(
-    '/PATH/TO/YOUR/GOON/MATERIAL', -- has to be an absolute path
-    5 -- the amount of goon pics in the goon material folder
-)
+require('sex').setup({
+    goon_path = '/PATH/TO/YOUR/GOON/MATERIAL', -- has to be an absolute path
+    goon_amount = 5, -- the amount of goon pics in the goon material folder
+})
 ```
 
 Your goon material folder should have at least one ascii art, it should be named '1.txt', with the second one being called '2.txt' etc.
@@ -39,6 +39,5 @@ You can add as many as you want.
 
 # To Do
 
-- Better configuration
 - Support for kitty image protocol and other terminal image protocols
 - Animation
