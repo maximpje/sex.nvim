@@ -48,7 +48,10 @@ local function create_window(goon_dir, goon_amount)
     return sexwindow
 end
 
-function M.setup(goon_dir, goon_amount)
+function M.setup(args)
+
+    local goon_dir = args.goon_path
+    local goon_amount = args.goon_amount
 
     local sexwindow = nil
 
