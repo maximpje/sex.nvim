@@ -1,82 +1,32 @@
 local Animation = {}
 
-local symbols = {
-    b000000 = ' ',
-    b000001 = '⠁',
-    b000010 = '⠈',
-    b000011 = '⠉',
-    b000100 = '⠂',
-    b000101 = '⠃',
-    b000110 = '⠊',
-    b000111 = '⠋',
-    b001000 = '⠐',
-    b001001 = '⠑',
-    b001010 = '⠘',
-    b001011 = '⠙',
-    b001100 = '⠒',
-    b001101 = '⠓',
-    b001110 = '⠚',
-    b001111 = '⠛',
-    b010000 = '⠄',
-    b010001 = '⠅',
-    b010010 = '⠌',
-    b010011 = '⠍',
-    b010100 = '⠆',
-    b010101 = '⠇',
-    b010110 = '⠎',
-    b010111 = '⠏',
-    b011000 = '⠔',
-    b011001 = '⠕',
-    b011010 = '⠜',
-    b011011 = '⠝',
-    b011100 = '⠖',
-    b011101 = '⠗',
-    b011110 = '⠞',
-    b011111 = '⠟',
-    b100000 = '⠠',
-    b100001 = '⠡',
-    b100010 = '⠨',
-    b100011 = '⠩',
-    b100100 = '⠢',
-    b100101 = '⠪',
-    b100110 = '⠸',
-    b100111 = '⠹',
-    b101000 = '⠢',
-    b101001 = '⠣',
-    b101010 = '⠪',
-    b101011 = '⠫',
-    b101100 = '⠲',
-    b101101 = '⠳',
-    b101110 = '⠺',
-    b101111 = '⠻',
-    b110000 = '⠤',
-    b110001 = '⠥',
-    b110010 = '⠬',
-    b110011 = '⠭',
-    b110100 = '⠦',
-    b110101 = '⠧',
-    b110110 = '⠮',
-    b110111 = '⠯',
-    b111000 = '⠴',
-    b111001 = '⠵',
-    b111010 = '⠼',
-    b111011 = '⠽',
-    b111100 = '⠶',
-    b111101 = '⠷',
-    b111110 = '⠾',
-    b111111 = '⠿',
-}
+-- in unicode 8 bits represent the braille characters which are 8 dots
+-- this function takes advantage of that to generate the unicode character
+local function get_symbol(d1, d2, d3, d4, d5, d6, d7, d8)
+    local bits =
+        (d1 ~= 0 and 1 or 0) +
+        (d2 ~= 0 and 2 or 0) +
+        (d3 ~= 0 and 4 or 0) +
+        (d4 ~= 0 and 8 or 0) +
+        (d5 ~= 0 and 16 or 0) +
+        (d6 ~= 0 and 32 or 0) +
+        (d7 ~= 0 and 64 or 0) +
+        (d8 ~= 0 and 128 or 0)
 
+    return vim.fn.nr2char(0x2800 + bits)
+end
+
+-- this is a function to test the thingy
 local function condition(x, y)
     -- print(x .. " " .. y)
-    return math.abs(x - y) < 1
+    return x*x + y*y < 2025
 end
 
 local function get_char(x, y)
     local char
 
     x = x*2
-    y = y*3
+    y = y*4
 
     local d1 = 0
     local d2 = 0
@@ -84,33 +34,45 @@ local function get_char(x, y)
     local d4 = 0
     local d5 = 0
     local d6 = 0
+    local d7 = 0
+    local d8 = 0
 
-    if condition(x, y+2) then
+
+    if condition(x, y) then
+        d7 = 1
+    end
+    if condition(x+1, y) then
+        d8 = 1
+    end
+    if condition(x+1, y+1) then
         d6 = 1
     end
     if condition(x+1, y+2) then
         d5 = 1
     end
-    if condition(x, y+1) then
+    if condition(x+1, y+3) then
         d4 = 1
     end
-    if condition(x+1, y+1) then
+    if condition(x, y+1) then
         d3 = 1
     end
-    if condition(x, y) then
+    if condition(x, y+2) then
         d2 = 1
     end
-    if condition(x+1, y) then
+    if condition(x, y+3) then
         d1 = 1
     end
 
-    char = symbols['b' .. d1 .. d2 .. d3 .. d4 .. d5 .. d6]
+    -- char = symbols['b' .. d1 .. d2 .. d3 .. d4 .. d5 .. d6]
 
-    -- print('b' .. d1 .. d2 .. d3 .. d4 .. d5 .. d6)
+    char = get_symbol(d1, d2, d3, d4, d5, d6, d7, d8)
+
+    -- print(d1, d2, d3, d4, d5, d6, d7, d8)
 
     return char
 end
 
+-- generates a table
 local function create_frame(width, height)
     local frame = {}
 
@@ -133,6 +95,7 @@ local function create_frame(width, height)
     return frame
 end
 
+-- creates buffer and a window
 local function create_window()
     local width = 70
     local height = 30
@@ -155,6 +118,7 @@ local function create_window()
     return window
 end
 
+-- defines command
 function Animation.setup()
     vim.api.nvim_create_user_command('SexAnimate', function ()
         create_window()
