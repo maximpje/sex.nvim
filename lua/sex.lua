@@ -12,7 +12,7 @@ function M.setup(args)
     animation.setup()
 
     vim.api.nvim_create_user_command('SexVersion', function ()
-        print('sex.nvim   version: 0.0    commit: animation testing 1')
+        print('sex.nvim   version: 0.0    commit: animation testing 2')
     end, {})
 
     vim.api.nvim_create_user_command('SexUpdate', function ()
