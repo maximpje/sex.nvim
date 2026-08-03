@@ -17,51 +17,29 @@ local function get_symbol(d1, d2, d3, d4, d5, d6, d7, d8)
 end
 
 -- this is a function to test the thingy
-local function condition(x, y)
+local function condition(x, y, t)
     -- print(x .. " " .. y)
-    return x*x + y*y < 2025
+    if x*x + y*y < t then
+        return 1
+    else
+        return 0
+    end
 end
 
-local function get_char(x, y)
+local function get_char(x, y, t)
     local char
 
     x = x*2
     y = y*4
 
-    local d1 = 0
-    local d2 = 0
-    local d3 = 0
-    local d4 = 0
-    local d5 = 0
-    local d6 = 0
-    local d7 = 0
-    local d8 = 0
-
-
-    if condition(x, y) then
-        d7 = 1
-    end
-    if condition(x+1, y) then
-        d8 = 1
-    end
-    if condition(x+1, y+1) then
-        d6 = 1
-    end
-    if condition(x+1, y+2) then
-        d5 = 1
-    end
-    if condition(x+1, y+3) then
-        d4 = 1
-    end
-    if condition(x, y+1) then
-        d3 = 1
-    end
-    if condition(x, y+2) then
-        d2 = 1
-    end
-    if condition(x, y+3) then
-        d1 = 1
-    end
+    local d1 = condition(x, y+3, t)
+    local d2 = condition(x, y+2, t)
+    local d3 = condition(x, y+1, t)
+    local d4 = condition(x+1, y+3, t)
+    local d5 = condition(x+1, y+2, t)
+    local d6 = condition(x+1, y+1, t)
+    local d7 = condition(x, y, t)
+    local d8 = condition(x+1, y, t)
 
     -- char = symbols['b' .. d1 .. d2 .. d3 .. d4 .. d5 .. d6]
 
@@ -73,17 +51,18 @@ local function get_char(x, y)
 end
 
 -- generates a table
-local function create_frame(width, height)
+local function create_frame(width, height, t)
     local frame = {}
 
     local y = 0
 
+    -- for every y a string is generated which is added to the frame table
     while y < height do
         local x = 0
         local str = ''
 
         while x < width do
-            str = str .. get_char(x-(width/2), -y+(height/2))
+            str = str .. get_char(x-(width/2), -y+(height/2), t)
             x = x+1
         end
 
@@ -95,13 +74,17 @@ local function create_frame(width, height)
     return frame
 end
 
--- creates buffer and a window
-local function create_window()
-    local width = 70
-    local height = 30
+-- creates buffer
+local function create_buffer()
 
     local buf = vim.api.nvim_create_buf(false, true)
-    vim.api.nvim_buf_set_lines(buf, 0, -1, true, create_frame(width, height))
+
+    return buf
+
+end
+
+-- creates buffer and a window
+local function create_window(buf, width, height)
 
     local window = vim.api.nvim_open_win(buf, false, {
         relative='win',
@@ -118,10 +101,45 @@ local function create_window()
     return window
 end
 
+-- loop
+local function ani_loop(buf, width, height)
+    local t = 0
+
+    while true do
+
+        vim.api.nvim_buf_set_lines(buf, 0, -1, true, create_frame(width, height, t))
+
+
+        -- print("eeping   t=" .. t)
+        --os.execute('sleep ' .. 1)
+
+        if t>3000 then
+            break
+        end
+
+        t = t + 1
+
+    end
+end
+
 -- defines command
 function Animation.setup()
+    local window = nil
+
+    local width = 70
+    local height = 30
+
     vim.api.nvim_create_user_command('SexAnimate', function ()
-        create_window()
+        local buf = create_buffer()
+        window = create_window(buf, width, height)
+
+        ani_loop(buf, width, height)
+    end, {})
+
+    vim.api.nvim_create_user_command('SexAnimateClose', function ()
+        if window~=nil then
+            vim.api.nvim_win_close(window, true)
+        end
     end, {})
 end
 
