@@ -26,6 +26,7 @@ local function condition(x, y, t)
     end
 end
 
+-- gets the braille character at a position
 local function get_char(x, y, t)
     local char
 
@@ -52,37 +53,29 @@ end
 
 -- generates a table
 local function create_frame(width, height, t)
-    local tstring = 't = ' .. t
-
-    local frame = {tstring}
-
-    local y = 0
+    local frame = {}
 
     -- for every y a string is generated which is added to the frame table
+    local y = 0
     while y < height do
         local x = 0
         local str = ''
 
         while x < width do
+            -- get braille character for every x,y,t
             str = str .. get_char(x-(width/2), -y+(height/2), t)
+
+            -- increment iterator
             x = x+1
         end
 
+        -- add line to the table
         table.insert(frame, str)
 
         y = y+1
     end
 
     return frame
-end
-
--- creates buffer
-local function create_buffer()
-
-    local buf = vim.api.nvim_create_buf(false, true)
-
-    return buf
-
 end
 
 -- creates buffer and a window
@@ -104,32 +97,37 @@ local function create_window(buf, width, height)
 end
 
 -- recursive loop
-local function animate(buf, width, height, t)
-    vim.api.nvim_buf_set_lines(buf, 0, -1, false,
-        create_frame(width, height, t))
+local function animation_loop(buf, width, height, t)
 
+    -- draw animation
+    vim.api.nvim_buf_set_lines(buf, 0, -1, false, create_frame(width, height, t))
+
+    -- next line
     if t < 400 then
         vim.defer_fn(function()
-            animate(buf, width, height, t + 1)
+            animation_loop(buf, width, height, t + 1)
         end, 16)
     end
 end
 
--- defines command
-function Animation.setup()
+-- defines commands
+function Animation.setup(width, height)
     local window = nil
 
-    local width = 70
-    local height = 30
-
+    -- open animation window
     vim.api.nvim_create_user_command('SexAnimate', function ()
-        local buf = create_buffer()
+        -- create buffer
+        local buf = vim.api.nvim_create_buf(false, true)
+
+        -- create window
         window = create_window(buf, width, height)
 
+        -- start animation loop
         local t = 0
-        animate(buf, width, height, t)
+        animation_loop(buf, width, height, t)
     end, {})
 
+    -- close animation window
     vim.api.nvim_create_user_command('SexAnimateClose', function ()
         if window~=nil then
             vim.api.nvim_win_close(window, true)

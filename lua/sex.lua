@@ -9,7 +9,7 @@ function M.setup(args)
     local goon_amount = args.goon_amount
 
     goon.setup(goon_dir, goon_amount)
-    animation.setup()
+    animation.setup(70, 30)
 
     vim.api.nvim_create_user_command('SexVersion', function ()
         print('sex.nvim   version: 0.0    commit: animation testing 4')
