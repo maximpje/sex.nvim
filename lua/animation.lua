@@ -19,7 +19,7 @@ end
 -- this is a function to test the thingy
 local function condition(x, y, t)
     -- print(x .. " " .. y)
-    if x*x + y*y < t then
+    if x*x + y*y < (t*t)/8 then
         return 1
     else
         return 0
@@ -52,7 +52,9 @@ end
 
 -- generates a table
 local function create_frame(width, height, t)
-    local frame = {}
+    local tstring = 't = ' .. t
+
+    local frame = {tstring}
 
     local y = 0
 
@@ -101,24 +103,15 @@ local function create_window(buf, width, height)
     return window
 end
 
--- loop
-local function ani_loop(buf, width, height)
-    local t = 0
+-- recursive loop
+local function animate(buf, width, height, t)
+    vim.api.nvim_buf_set_lines(buf, 0, -1, false,
+        create_frame(width, height, t))
 
-    while true do
-
-        vim.api.nvim_buf_set_lines(buf, 0, -1, true, create_frame(width, height, t))
-
-
-        -- print("eeping   t=" .. t)
-        --os.execute('sleep ' .. 1)
-
-        if t>3000 then
-            break
-        end
-
-        t = t + 1
-
+    if t < 400 then
+        vim.defer_fn(function()
+            animate(buf, width, height, t + 1)
+        end, 16)
     end
 end
 
@@ -133,7 +126,8 @@ function Animation.setup()
         local buf = create_buffer()
         window = create_window(buf, width, height)
 
-        ani_loop(buf, width, height)
+        local t = 0
+        animate(buf, width, height, t)
     end, {})
 
     vim.api.nvim_create_user_command('SexAnimateClose', function ()
